@@ -32,36 +32,19 @@ export const ExecutiveSummary = ({ report }: ExecutiveSummaryProps) => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <Card className="shadow-card bg-gradient-primary text-white">
-        <CardHeader>
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <div>
-              <CardTitle className="text-2xl lg:text-3xl font-bold">
-                {report.projectName}
-              </CardTitle>
-              <div className="flex items-center gap-4 mt-2 text-blue-100">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span className="text-sm">{report.productOwner}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span className="text-sm">{formatDate(report.reportDate)}</span>
-                </div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-4xl font-bold">{healthScore}%</div>
-              <div className="text-sm text-blue-100">Health Score</div>
-            </div>
+    <div className="space-y-4">
+      {/* Health Score */}
+      <Card className="shadow-card">
+        <CardContent className="p-4">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-primary">{healthScore}%</div>
+            <div className="text-sm text-muted-foreground">Health Score</div>
           </div>
-        </CardHeader>
+        </CardContent>
       </Card>
 
       {/* Métricas principais */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-3">
         <Card className="shadow-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
