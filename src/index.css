@@ -2,39 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* C-Level Reports Design System - Cores Vibrantes */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 250 100% 99%;
+    --foreground: 220 10% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 220 10% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 220 10% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 220 100% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 15% 95%;
+    --secondary-foreground: 220 10% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 15% 95%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 220 100% 96%;
+    --accent-foreground: 220 100% 50%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 20% 88%;
+    --input: 220 20% 88%;
+    --ring: 220 100% 50%;
+
+    /* Status Colors - Vibrantes */
+    --status-green: 140 85% 45%;
+    --status-green-foreground: 0 0% 100%;
+    --status-green-light: 140 85% 95%;
+    
+    --status-yellow: 45 95% 55%;
+    --status-yellow-foreground: 0 0% 100%;
+    --status-yellow-light: 45 95% 95%;
+    
+    --status-red: 0 85% 55%;
+    --status-red-foreground: 0 0% 100%;
+    --status-red-light: 0 85% 95%;
+    
+    --status-blue: 220 100% 50%;
+    --status-blue-foreground: 0 0% 100%;
+    --status-blue-light: 220 100% 95%;
+
+    /* Progress & Highlights */
+    --progress-track: 220 15% 90%;
+    --success: 140 85% 45%;
+    --warning: 45 95% 55%;
+    --error: 0 85% 55%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(220 100% 50%), hsl(260 100% 60%));
+    --gradient-success: linear-gradient(135deg, hsl(140 85% 45%), hsl(160 85% 50%));
+    --gradient-warning: linear-gradient(135deg, hsl(45 95% 55%), hsl(35 95% 60%));
+    --gradient-danger: linear-gradient(135deg, hsl(0 85% 55%), hsl(15 85% 60%));
+    
+    /* Shadows */
+    --shadow-card: 0 4px 20px -2px hsl(220 30% 70% / 0.15);
+    --shadow-elevated: 0 8px 30px -4px hsl(220 30% 70% / 0.25);
+    --shadow-intense: 0 12px 40px -6px hsl(220 30% 70% / 0.35);
 
     --radius: 0.5rem;
 

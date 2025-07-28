@@ -52,6 +52,30 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Status colors para o sistema de relatórios
+				'status-green': {
+					DEFAULT: 'hsl(var(--status-green))',
+					foreground: 'hsl(var(--status-green-foreground))',
+					light: 'hsl(var(--status-green-light))'
+				},
+				'status-yellow': {
+					DEFAULT: 'hsl(var(--status-yellow))',
+					foreground: 'hsl(var(--status-yellow-foreground))',
+					light: 'hsl(var(--status-yellow-light))'
+				},
+				'status-red': {
+					DEFAULT: 'hsl(var(--status-red))',
+					foreground: 'hsl(var(--status-red-foreground))',
+					light: 'hsl(var(--status-red-light))'
+				},
+				'status-blue': {
+					DEFAULT: 'hsl(var(--status-blue))',
+					foreground: 'hsl(var(--status-blue-foreground))',
+					light: 'hsl(var(--status-blue-light))'
+				},
+				success: 'hsl(var(--success))',
+				warning: 'hsl(var(--warning))',
+				error: 'hsl(var(--error))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -62,6 +86,17 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				}
+			},
+			backgroundImage: {
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-success': 'var(--gradient-success)',
+				'gradient-warning': 'var(--gradient-warning)',
+				'gradient-danger': 'var(--gradient-danger)'
+			},
+			boxShadow: {
+				'card': 'var(--shadow-card)',
+				'elevated': 'var(--shadow-elevated)',
+				'intense': 'var(--shadow-intense)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
