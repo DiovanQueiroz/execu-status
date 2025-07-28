@@ -1,52 +1,195 @@
 import { useState } from 'react';
-import { ExecutiveSummary } from '@/components/ExecutiveSummary';
-import { TimelineSection } from '@/components/TimelineSection';
-import { FeaturesSection } from '@/components/FeaturesSection';
-import { HighlightsSection } from '@/components/HighlightsSection';
-import { BlockersSection } from '@/components/BlockersSection';
-import { HelpRequestsSection } from '@/components/HelpRequestsSection';
-import { ActionsSection } from '@/components/ActionsSection';
+import { StatusBadge } from '@/components/StatusBadge';
+import { ProgressBar } from '@/components/ProgressBar';
 import { sampleReport } from '@/data/sampleData';
 import { ProjectReport } from '@/types/report';
+import { Card, CardContent } from '@/components/ui/card';
+import { 
+  TrendingUp, TrendingDown, CheckCircle, AlertTriangle, 
+  Package, Clock, User, Calendar, Shield, HelpCircle 
+} from 'lucide-react';
 
 const Index = () => {
   const [currentReport] = useState<ProjectReport>(sampleReport);
 
+  // Calcular métricas
+  const totalFeatures = currentReport.features.length;
+  const featuresOnTrack = currentReport.features.filter(f => f.status === 'green').length;
+  const featuresAtRisk = currentReport.features.filter(f => f.status === 'yellow').length;
+  const featuresCritical = currentReport.features.filter(f => f.status === 'red').length;
+  const phases = Object.values(currentReport.timeline);
+  const overallProgress = Math.round(phases.reduce((sum, phase) => sum + phase.progress, 0) / phases.length);
+  const healthScore = Math.round(((featuresOnTrack * 3 + featuresAtRisk * 1.5) / (totalFeatures * 3)) * 100);
+
+  const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('pt-BR');
+
   return (
     <div className="min-h-screen bg-background p-4">
-      <div className="max-w-[1600px] mx-auto">
-        {/* Header compacto */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-foreground mb-2">{currentReport.projectName}</h1>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span>PO: {currentReport.productOwner}</span>
-            <span>Data: {new Date(currentReport.reportDate).toLocaleDateString('pt-BR')}</span>
+      <div className="max-w-[1400px] mx-auto space-y-4">
+        
+        {/* Header + Métricas */}
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-6">
+            <h1 className="text-2xl font-bold text-foreground">{currentReport.projectName}</h1>
+            <div className="text-sm text-muted-foreground">
+              PO: {currentReport.productOwner} | {formatDate(currentReport.reportDate)}
+            </div>
+          </div>
+          <div className="col-span-6 grid grid-cols-5 gap-3">
+            <Card className="text-center">
+              <CardContent className="p-3">
+                <div className="text-xl font-bold text-primary">{healthScore}%</div>
+                <div className="text-xs text-muted-foreground">Health</div>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="p-3">
+                <div className="text-xl font-bold text-status-green">{featuresOnTrack}</div>
+                <div className="text-xs text-muted-foreground">No Track</div>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="p-3">
+                <div className="text-xl font-bold text-status-yellow">{featuresAtRisk}</div>
+                <div className="text-xs text-muted-foreground">Atenção</div>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="p-3">
+                <div className="text-xl font-bold text-status-red">{featuresCritical}</div>
+                <div className="text-xs text-muted-foreground">Críticas</div>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="p-3">
+                <div className="text-xl font-bold text-primary">{overallProgress}%</div>
+                <div className="text-xs text-muted-foreground">Progresso</div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
-        {/* Layout em grade */}
-        <div className="grid grid-cols-12 gap-4 h-[calc(100vh-140px)]">
-          {/* Coluna esquerda - Métricas e Timeline */}
-          <div className="col-span-4 space-y-4 overflow-y-auto">
-            <ExecutiveSummary report={currentReport} />
-            <TimelineSection 
-              timeline={currentReport.timeline} 
-              features={currentReport.features} 
-            />
-          </div>
+        {/* Timeline */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Clock className="h-4 w-4 text-primary" />
+              <span className="font-semibold">Timeline</span>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              {phases.map((phase, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded">
+                  <div>
+                    <div className="font-medium text-sm">{phase.name}</div>
+                    <div className="text-xs text-muted-foreground">{phase.progress}%</div>
+                  </div>
+                  <StatusBadge status={phase.status} size="sm" />
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Features Table */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Package className="h-4 w-4 text-primary" />
+              <span className="font-semibold">Features ({totalFeatures})</span>
+            </div>
+            <div className="space-y-1">
+              {currentReport.features.map((feature) => (
+                <div key={feature.id} className="grid grid-cols-12 gap-2 items-center py-2 px-3 bg-muted/30 rounded text-sm">
+                  <div className="col-span-4 truncate">{feature.name}</div>
+                  <div className="col-span-2">{feature.owner}</div>
+                  <div className="col-span-2">
+                    <ProgressBar value={feature.progress} size="sm" showValue={false} />
+                  </div>
+                  <div className="col-span-2 text-xs">{formatDate(feature.dueDate)}</div>
+                  <div className="col-span-1"><StatusBadge status={feature.status} size="sm" /></div>
+                  <div className="col-span-1 text-xs text-muted-foreground">{feature.phase}</div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Bottom Section - 4 columns */}
+        <div className="grid grid-cols-4 gap-4">
           
-          {/* Coluna central - Features */}
-          <div className="col-span-5 overflow-y-auto">
-            <FeaturesSection features={currentReport.features} />
-          </div>
-          
-          {/* Coluna direita - Highlights, Blockers, etc */}
-          <div className="col-span-3 space-y-4 overflow-y-auto">
-            <HighlightsSection highlights={currentReport.highlights} />
-            <BlockersSection blockers={currentReport.blockers} />
-            <HelpRequestsSection helpRequests={currentReport.helpRequests} />
-            <ActionsSection actions={currentReport.actions} />
-          </div>
+          {/* Highlights */}
+          <Card>
+            <CardContent className="p-4">
+              <div className="font-semibold text-sm mb-3 text-status-green">✓ Highlights</div>
+              <div className="space-y-2">
+                {currentReport.highlights.filter(h => h.type === 'positive').map((highlight) => (
+                  <div key={highlight.id} className="text-xs p-2 bg-status-green-light rounded">
+                    <div className="font-medium">{highlight.title}</div>
+                    <div className="text-muted-foreground">{highlight.description.slice(0, 60)}...</div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="font-semibold text-sm mb-3 mt-4 text-status-red">⚠ Lowlights</div>
+              <div className="space-y-2">
+                {currentReport.highlights.filter(h => h.type === 'negative').map((highlight) => (
+                  <div key={highlight.id} className="text-xs p-2 bg-status-red-light rounded">
+                    <div className="font-medium">{highlight.title}</div>
+                    <div className="text-muted-foreground">{highlight.description.slice(0, 60)}...</div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Blockers */}
+          <Card>
+            <CardContent className="p-4">
+              <div className="font-semibold text-sm mb-3 text-status-red">🚫 Bloqueios</div>
+              <div className="space-y-2">
+                {currentReport.blockers.map((blocker) => (
+                  <div key={blocker.id} className="text-xs p-2 bg-status-red-light rounded">
+                    <div className="font-medium">{blocker.title}</div>
+                    <div className="text-muted-foreground">{blocker.severity} - {blocker.owner}</div>
+                    <div className="text-muted-foreground">{formatDate(blocker.estimatedResolution)}</div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Help Requests */}
+          <Card>
+            <CardContent className="p-4">
+              <div className="font-semibold text-sm mb-3 text-primary">❓ Ajuda</div>
+              <div className="space-y-2">
+                {currentReport.helpRequests.map((help) => (
+                  <div key={help.id} className="text-xs p-2 bg-primary/10 rounded">
+                    <div className="font-medium">{help.title}</div>
+                    <div className="text-muted-foreground">{help.department} - {help.urgency}</div>
+                    <div className="text-muted-foreground">{help.requestedBy}</div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Actions */}
+          <Card>
+            <CardContent className="p-4">
+              <div className="font-semibold text-sm mb-3 text-status-blue">📋 Ações</div>
+              <div className="space-y-2">
+                {currentReport.actions.map((action) => (
+                  <div key={action.id} className="text-xs p-2 bg-status-blue-light rounded">
+                    <div className="font-medium">{action.title}</div>
+                    <div className="text-muted-foreground">{action.owner} - {action.priority}</div>
+                    <div className="text-muted-foreground">{formatDate(action.dueDate)}</div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
         </div>
       </div>
     </div>
