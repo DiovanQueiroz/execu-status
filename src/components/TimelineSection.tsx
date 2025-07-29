@@ -6,18 +6,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface TimelineSectionProps {
   timeline: ProjectReport['timeline'];
-  features: ProjectReport['features'];
+  epics: ProjectReport['epics'];
 }
 
-export const TimelineSection = ({ timeline, features }: TimelineSectionProps) => {
+export const TimelineSection = ({ timeline, epics }: TimelineSectionProps) => {
   const phases = [
     { key: 'requirements', phase: timeline.requirements },
     { key: 'development', phase: timeline.development },
     { key: 'qa', phase: timeline.qa }
   ];
 
-  const getPhaseFeatures = (phaseKey: string) => {
-    return features.filter(feature => feature.phase === phaseKey);
+  const getPhaseEpics = (phaseKey: string) => {
+    return epics.filter(epic => epic.phase === phaseKey);
   };
 
   const formatDate = (dateString: string) => {
@@ -35,8 +35,8 @@ export const TimelineSection = ({ timeline, features }: TimelineSectionProps) =>
       <CardContent>
         <div className="space-y-4">
           {phases.map(({ key, phase }, index) => {
-            const phaseFeatures = getPhaseFeatures(key);
-            const criticalFeatures = phaseFeatures.filter(f => f.status === 'red');
+            const phaseEpics = getPhaseEpics(key);
+            const criticalEpics = phaseEpics.filter(f => f.status === 'red');
             
             return (
               <div key={key} className="border rounded-lg p-3 bg-card">
@@ -58,10 +58,10 @@ export const TimelineSection = ({ timeline, features }: TimelineSectionProps) =>
                   />
 
                   <div className="text-xs text-muted-foreground">
-                    {phaseFeatures.length} features
-                    {criticalFeatures.length > 0 && (
+                    {phaseEpics.length} épicos
+                    {criticalEpics.length > 0 && (
                       <span className="text-status-red font-medium ml-2">
-                        ({criticalFeatures.length} críticas)
+                        ({criticalEpics.length} críticos)
                       </span>
                     )}
                   </div>

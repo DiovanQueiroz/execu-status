@@ -11,15 +11,23 @@ export interface TimelinePhase {
   description: string;
 }
 
-export interface Feature {
+export interface UserStory {
+  id: string;
+  ticketNumber: string;
+  name: string;
+  boardStatus: string; // ex: "To Do", "In Progress", "Done", etc.
+  progress: number; // 0-100
+}
+
+export interface Epic {
   id: string;
   name: string;
-  status: Status;
+  status: Status; // status manual do épico
   owner: string;
-  progress: number;
   dueDate: string;
   concerns: string;
-  phase: 'requirements' | 'development' | 'qa';
+  phase: 'requirements' | 'development' | 'qa'; // fase da timeline
+  userStories: UserStory[];
 }
 
 export interface Highlight {
@@ -69,7 +77,7 @@ export interface ProjectReport {
     development: TimelinePhase;
     qa: TimelinePhase;
   };
-  features: Feature[];
+  epics: Epic[];
   highlights: Highlight[];
   blockers: Blocker[];
   helpRequests: HelpRequest[];

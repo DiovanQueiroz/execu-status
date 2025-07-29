@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StatusBadge } from '@/components/StatusBadge';
 import { ProgressBar } from '@/components/ProgressBar';
+import { EpicsSection } from '@/components/EpicsSection';
 import { sampleReport } from '@/data/sampleData';
 import { ProjectReport } from '@/types/report';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,13 +14,13 @@ const Index = () => {
   const [currentReport] = useState<ProjectReport>(sampleReport);
 
   // Calcular métricas
-  const totalFeatures = currentReport.features.length;
-  const featuresOnTrack = currentReport.features.filter(f => f.status === 'green').length;
-  const featuresAtRisk = currentReport.features.filter(f => f.status === 'yellow').length;
-  const featuresCritical = currentReport.features.filter(f => f.status === 'red').length;
+  const totalEpics = currentReport.epics.length;
+  const epicsOnTrack = currentReport.epics.filter(f => f.status === 'green').length;
+  const epicsAtRisk = currentReport.epics.filter(f => f.status === 'yellow').length;
+  const epicsCritical = currentReport.epics.filter(f => f.status === 'red').length;
   const phases = Object.values(currentReport.timeline);
   const overallProgress = Math.round(phases.reduce((sum, phase) => sum + phase.progress, 0) / phases.length);
-  const healthScore = Math.round(((featuresOnTrack * 3 + featuresAtRisk * 1.5) / (totalFeatures * 3)) * 100);
+  const healthScore = Math.round(((epicsOnTrack * 3 + epicsAtRisk * 1.5) / (totalEpics * 3)) * 100);
 
   const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('pt-BR');
 
@@ -44,19 +45,19 @@ const Index = () => {
             </Card>
             <Card className="text-center">
               <CardContent className="p-3">
-                <div className="text-xl font-bold text-status-green">{featuresOnTrack}</div>
+                <div className="text-xl font-bold text-status-green">{epicsOnTrack}</div>
                 <div className="text-xs text-muted-foreground">No Track</div>
               </CardContent>
             </Card>
             <Card className="text-center">
               <CardContent className="p-3">
-                <div className="text-xl font-bold text-status-yellow">{featuresAtRisk}</div>
+                <div className="text-xl font-bold text-status-yellow">{epicsAtRisk}</div>
                 <div className="text-xs text-muted-foreground">Atenção</div>
               </CardContent>
             </Card>
             <Card className="text-center">
               <CardContent className="p-3">
-                <div className="text-xl font-bold text-status-red">{featuresCritical}</div>
+                <div className="text-xl font-bold text-status-red">{epicsCritical}</div>
                 <div className="text-xs text-muted-foreground">Críticas</div>
               </CardContent>
             </Card>
@@ -69,50 +70,9 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Timeline */}
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Clock className="h-4 w-4 text-primary" />
-              <span className="font-semibold">Timeline</span>
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              {phases.map((phase, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded">
-                  <div>
-                    <div className="font-medium text-sm">{phase.name}</div>
-                    <div className="text-xs text-muted-foreground">{phase.progress}%</div>
-                  </div>
-                  <StatusBadge status={phase.status} size="sm" />
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Features Table */}
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Package className="h-4 w-4 text-primary" />
-              <span className="font-semibold">Features ({totalFeatures})</span>
-            </div>
-            <div className="space-y-1">
-              {currentReport.features.map((feature) => (
-                <div key={feature.id} className="grid grid-cols-12 gap-2 items-center py-2 px-3 bg-muted/30 rounded text-sm">
-                  <div className="col-span-4 truncate">{feature.name}</div>
-                  <div className="col-span-2">{feature.owner}</div>
-                  <div className="col-span-2">
-                    <ProgressBar value={feature.progress} size="sm" showValue={false} />
-                  </div>
-                  <div className="col-span-2 text-xs">{formatDate(feature.dueDate)}</div>
-                  <div className="col-span-1"><StatusBadge status={feature.status} size="sm" /></div>
-                  <div className="col-span-1 text-xs text-muted-foreground">{feature.phase}</div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        {/* Épicos Section */}
+        <EpicsSection epics={currentReport.epics} />
 
         {/* Bottom Section - 4 columns */}
         <div className="grid grid-cols-4 gap-4">

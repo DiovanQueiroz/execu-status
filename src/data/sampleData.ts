@@ -32,56 +32,152 @@ export const sampleReport: ProjectReport = {
       description: 'Ambiente de testes em configuração. Dependente da conclusão de features críticas do desenvolvimento.'
     }
   },
-  features: [
+  epics: [
     {
-      id: 'feat-001',
+      id: 'epic-001',
       name: 'Autenticação e Onboarding',
       status: 'green',
       owner: 'João Santos',
-      progress: 95,
       dueDate: '2024-02-10',
       concerns: 'Aguardando aprovação final do design do fluxo de login social.',
-      phase: 'requirements'
+      phase: 'requirements',
+      userStories: [
+        {
+          id: 'story-001',
+          ticketNumber: 'AUTH-001',
+          name: 'Login com email e senha',
+          boardStatus: 'Done',
+          progress: 100
+        },
+        {
+          id: 'story-002',
+          ticketNumber: 'AUTH-002',
+          name: 'Login social (Google/Facebook)',
+          boardStatus: 'In Review',
+          progress: 90
+        },
+        {
+          id: 'story-003',
+          ticketNumber: 'AUTH-003',
+          name: 'Fluxo de onboarding',
+          boardStatus: 'Done',
+          progress: 100
+        }
+      ]
     },
     {
-      id: 'feat-002',
+      id: 'epic-002',
       name: 'Catálogo de Produtos',
       status: 'yellow',
       owner: 'Ana Costa',
-      progress: 70,
       dueDate: '2024-03-15',
       concerns: 'Performance de busca precisa ser otimizada para grandes volumes.',
-      phase: 'development'
+      phase: 'development',
+      userStories: [
+        {
+          id: 'story-004',
+          ticketNumber: 'CAT-001',
+          name: 'Listagem de produtos',
+          boardStatus: 'Done',
+          progress: 100
+        },
+        {
+          id: 'story-005',
+          ticketNumber: 'CAT-002',
+          name: 'Busca e filtros',
+          boardStatus: 'In Progress',
+          progress: 60
+        },
+        {
+          id: 'story-006',
+          ticketNumber: 'CAT-003',
+          name: 'Detalhes do produto',
+          boardStatus: 'In Progress',
+          progress: 50
+        }
+      ]
     },
     {
-      id: 'feat-003',
+      id: 'epic-003',
       name: 'Carrinho e Checkout',
       status: 'red',
       owner: 'Pedro Lima',
-      progress: 30,
       dueDate: '2024-04-01',
       concerns: 'Integração com gateway de pagamento atrasada. Bloqueio crítico.',
-      phase: 'development'
+      phase: 'development',
+      userStories: [
+        {
+          id: 'story-007',
+          ticketNumber: 'CART-001',
+          name: 'Adicionar itens ao carrinho',
+          boardStatus: 'Done',
+          progress: 100
+        },
+        {
+          id: 'story-008',
+          ticketNumber: 'CART-002',
+          name: 'Finalizar pedido',
+          boardStatus: 'To Do',
+          progress: 0
+        },
+        {
+          id: 'story-009',
+          ticketNumber: 'PAY-001',
+          name: 'Integração com pagamento',
+          boardStatus: 'Blocked',
+          progress: 10
+        }
+      ]
     },
     {
-      id: 'feat-004',
+      id: 'epic-004',
       name: 'Sistema de Notificações',
       status: 'yellow',
       owner: 'Carla Mendes',
-      progress: 20,
       dueDate: '2024-04-20',
       concerns: 'Definição de políticas de privacidade ainda pendente.',
-      phase: 'development'
+      phase: 'development',
+      userStories: [
+        {
+          id: 'story-010',
+          ticketNumber: 'NOT-001',
+          name: 'Push notifications',
+          boardStatus: 'To Do',
+          progress: 0
+        },
+        {
+          id: 'story-011',
+          ticketNumber: 'NOT-002',
+          name: 'Email notifications',
+          boardStatus: 'In Progress',
+          progress: 40
+        }
+      ]
     },
     {
-      id: 'feat-005',
+      id: 'epic-005',
       name: 'Relatórios e Analytics',
       status: 'red',
       owner: 'Rafael Torres',
-      progress: 10,
       dueDate: '2024-05-10',
       concerns: 'Aguardando definição de métricas de negócio pela área comercial.',
-      phase: 'qa'
+      phase: 'qa',
+      userStories: [
+        {
+          id: 'story-012',
+          ticketNumber: 'RPT-001',
+          name: 'Dashboard de vendas',
+          boardStatus: 'To Do',
+          progress: 0
+        },
+        {
+          id: 'story-013',
+          ticketNumber: 'ANA-001',
+          name: 'Tracking de eventos',
+          boardStatus: 'In Progress',
+          progress: 20
+        }
+      ]
     }
   ],
   highlights: [

@@ -8,10 +8,10 @@ interface ExecutiveSummaryProps {
 
 export const ExecutiveSummary = ({ report }: ExecutiveSummaryProps) => {
   // Calcular métricas do projeto
-  const totalFeatures = report.features.length;
-  const featuresOnTrack = report.features.filter(f => f.status === 'green').length;
-  const featuresAtRisk = report.features.filter(f => f.status === 'yellow').length;
-  const featuresCritical = report.features.filter(f => f.status === 'red').length;
+  const totalEpics = report.epics.length;
+  const epicsOnTrack = report.epics.filter(f => f.status === 'green').length;
+  const epicsAtRisk = report.epics.filter(f => f.status === 'yellow').length;
+  const epicsCritical = report.epics.filter(f => f.status === 'red').length;
   
   const totalBlockers = report.blockers.length;
   const criticalBlockers = report.blockers.filter(b => b.severity === 'critical').length;
@@ -20,7 +20,7 @@ export const ExecutiveSummary = ({ report }: ExecutiveSummaryProps) => {
   const overallProgress = Math.round(phases.reduce((sum, phase) => sum + phase.progress, 0) / phases.length);
   
   const healthScore = Math.round(
-    ((featuresOnTrack * 3 + featuresAtRisk * 1.5) / (totalFeatures * 3)) * 100
+    ((epicsOnTrack * 3 + epicsAtRisk * 1.5) / (totalEpics * 3)) * 100
   );
 
   const formatDate = (dateString: string) => {
@@ -52,8 +52,8 @@ export const ExecutiveSummary = ({ report }: ExecutiveSummaryProps) => {
                 <CheckCircle className="h-6 w-6 text-status-green" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-status-green">{featuresOnTrack}</div>
-                <div className="text-xs text-muted-foreground">Features No Track</div>
+                <div className="text-2xl font-bold text-status-green">{epicsOnTrack}</div>
+                <div className="text-xs text-muted-foreground">Épicos No Track</div>
               </div>
             </div>
           </CardContent>
@@ -66,8 +66,8 @@ export const ExecutiveSummary = ({ report }: ExecutiveSummaryProps) => {
                 <AlertTriangle className="h-6 w-6 text-status-yellow" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-status-yellow">{featuresAtRisk}</div>
-                <div className="text-xs text-muted-foreground">Features Atenção</div>
+                <div className="text-2xl font-bold text-status-yellow">{epicsAtRisk}</div>
+                <div className="text-xs text-muted-foreground">Épicos Atenção</div>
               </div>
             </div>
           </CardContent>
@@ -80,8 +80,8 @@ export const ExecutiveSummary = ({ report }: ExecutiveSummaryProps) => {
                 <TrendingDown className="h-6 w-6 text-status-red" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-status-red">{featuresCritical}</div>
-                <div className="text-xs text-muted-foreground">Features Críticas</div>
+                <div className="text-2xl font-bold text-status-red">{epicsCritical}</div>
+                <div className="text-xs text-muted-foreground">Épicos Críticos</div>
               </div>
             </div>
           </CardContent>
@@ -103,7 +103,7 @@ export const ExecutiveSummary = ({ report }: ExecutiveSummaryProps) => {
       </div>
 
       {/* Status de alta prioridade */}
-      {(criticalBlockers > 0 || featuresCritical > 0) && (
+      {(criticalBlockers > 0 || epicsCritical > 0) && (
         <Card className="shadow-card border-status-red bg-status-red-light">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-status-red">
@@ -118,9 +118,9 @@ export const ExecutiveSummary = ({ report }: ExecutiveSummaryProps) => {
                   <span className="font-semibold">{criticalBlockers} bloqueio(s) crítico(s)</span> impedem o progresso
                 </div>
               )}
-              {featuresCritical > 0 && (
+              {epicsCritical > 0 && (
                 <div className="text-sm">
-                  <span className="font-semibold">{featuresCritical} feature(s) crítica(s)</span> fora do cronograma
+                  <span className="font-semibold">{epicsCritical} épico(s) crítico(s)</span> fora do cronograma
                 </div>
               )}
             </div>
