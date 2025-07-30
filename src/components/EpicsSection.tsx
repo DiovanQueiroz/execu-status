@@ -5,6 +5,7 @@ import { ProgressBar } from './ProgressBar';
 import { Epic } from '@/types/report';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Badge } from '@/components/ui/badge';
 
 interface EpicsSectionProps {
   epics: Epic[];
@@ -28,6 +29,15 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
       qa: 'QA & Testing'
     };
     return phaseLabels[phase];
+  };
+
+  const getProgressBadge = (phase: Epic['phase']) => {
+    const progressConfig = {
+      requirements: { label: 'REQ', icon: '📋' },
+      development: { label: 'DEV', icon: '👨‍💻' },
+      qa: { label: 'QA', icon: '🔍' }
+    };
+    return progressConfig[phase];
   };
 
   const calculateEpicProgress = (stories: Epic['userStories']) => {
@@ -72,7 +82,7 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
               <Collapsible key={epic.id} open={isOpen} onOpenChange={() => toggleEpic(epic.id)}>
                 <div className="border rounded hover:bg-muted/30 transition-colors">
                   <CollapsibleTrigger className="w-full">
-                    <div className="grid grid-cols-12 gap-2 items-center py-2 px-3 text-sm">
+                    <div className="grid grid-cols-14 gap-2 items-center py-2 px-3 text-sm">
                       {/* Chevron + Nome */}
                       <div className="col-span-4 flex items-center gap-2 text-left">
                         {isOpen ? (
@@ -86,7 +96,7 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                       {/* Owner */}
                       <div className="col-span-2 truncate">{epic.owner}</div>
 
-                      {/* Progresso */}
+                      {/* Progresso Visual */}
                       <div className="col-span-2">
                         <ProgressBar 
                           value={epicProgress} 
@@ -103,11 +113,20 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                         </span>
                       </div>
 
-                      {/* Status + Phase */}
+                      {/* Status de Saúde */}
                       <div className="col-span-1">
                         <StatusBadge status={epic.status} size="sm" />
                       </div>
 
+                      {/* Status de Progresso */}
+                      <div className="col-span-2">
+                        <Badge variant="secondary" className="text-xs bg-status-blue-light text-status-blue-foreground border-status-blue hover:bg-status-blue/10">
+                          <span className="mr-1">{getProgressBadge(epic.phase).icon}</span>
+                          {getProgressBadge(epic.phase).label}
+                        </Badge>
+                      </div>
+
+                      {/* Time */}
                       <div className="col-span-1 text-xs text-muted-foreground flex items-center justify-between">
                         <span>{getPhaseLabel(epic.phase).slice(0, 3)}</span>
                         {epic.concerns && <AlertCircle className="h-3 w-3 text-status-yellow" />}
@@ -126,7 +145,7 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                       
                       <div className="space-y-1 mt-2">
                         {epic.userStories.map((story) => (
-                          <div key={story.id} className="grid grid-cols-12 gap-2 items-center py-1 px-2 bg-background rounded text-xs">
+                          <div key={story.id} className="grid grid-cols-14 gap-2 items-center py-1 px-2 bg-background rounded text-xs">
                             <div className="col-span-1"></div>
                             <div className="col-span-2 font-mono text-muted-foreground">{story.ticketNumber}</div>
                             <div className="col-span-5 truncate">{story.name}</div>
@@ -141,6 +160,7 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                                 variant={story.progress === 100 ? 'success' : story.progress > 0 ? 'warning' : 'default'}
                               />
                             </div>
+                            <div className="col-span-2"></div>
                           </div>
                         ))}
                       </div>
