@@ -120,8 +120,7 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
 
                       {/* Status de Progresso */}
                       <div className="col-span-2">
-                        <Badge variant="secondary" className="text-xs bg-status-blue-light text-status-blue-foreground border-status-blue hover:bg-status-blue/10">
-                          <span className="mr-1">{getProgressBadge(epic.phase).icon}</span>
+                        <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">
                           {getProgressBadge(epic.phase).label}
                         </Badge>
                       </div>

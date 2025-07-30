@@ -10,7 +10,7 @@ interface StatusBadgeProps {
 const statusConfig = {
   green: {
     className: 'bg-status-green text-status-green-foreground border-status-green',
-    label: 'No Track'
+    label: 'OK'
   },
   yellow: {
     className: 'bg-status-yellow text-status-yellow-foreground border-status-yellow',
