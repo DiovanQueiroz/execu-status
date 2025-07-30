@@ -96,25 +96,15 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                       {/* Owner */}
                       <div className="col-span-2 truncate">{epic.owner}</div>
 
-                      {/* Progresso Visual */}
-                      <div className="col-span-2">
-                        <ProgressBar 
-                          value={epicProgress} 
-                          variant={epic.status === 'green' ? 'success' : epic.status === 'yellow' ? 'warning' : 'danger'}
-                          size="sm" 
-                          showValue={false}
-                        />
-                      </div>
-
                       {/* Data */}
-                      <div className="col-span-2 text-xs">
+                      <div className="col-span-3 text-xs">
                         <span className={isOverdue(epic.dueDate) && epic.status !== 'green' ? 'text-status-red font-semibold' : ''}>
                           {formatDate(epic.dueDate)}
                         </span>
                       </div>
 
                       {/* Status de Saúde */}
-                      <div className="col-span-1">
+                      <div className="col-span-2">
                         <StatusBadge status={epic.status} size="sm" />
                       </div>
 
@@ -125,10 +115,10 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                         </Badge>
                       </div>
 
-                      {/* Time */}
-                      <div className="col-span-1 text-xs text-muted-foreground flex items-center justify-between">
-                        <span>{getPhaseLabel(epic.phase).slice(0, 3)}</span>
-                        {epic.concerns && <AlertCircle className="h-3 w-3 text-status-yellow" />}
+                      {/* Progresso % */}
+                      <div className="col-span-1 text-xs text-center font-medium">
+                        {epicProgress}%
+                        {epic.concerns && <AlertCircle className="h-3 w-3 text-status-yellow ml-1" />}
                       </div>
                     </div>
                   </CollapsibleTrigger>
