@@ -39,7 +39,7 @@ const Index = () => {
   const epicsCritical = displayReport.epics.filter(f => f.status === 'red').length;
   const phases = Object.values(displayReport.timeline);
   const overallProgress = Math.round(phases.reduce((sum, phase) => sum + phase.progress, 0) / phases.length);
-  const healthScore = Math.round(((epicsOnTrack * 3 + epicsAtRisk * 1.5) / (totalEpics * 3)) * 100);
+  const bugResolutionRate = Math.round((displayReport.bugs.resolved / displayReport.bugs.total) * 100);
 
   const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('pt-BR');
 
@@ -86,8 +86,8 @@ const Index = () => {
           <div className="col-span-6 grid grid-cols-5 gap-3">
             <Card className="text-center">
               <CardContent className="p-3">
-                <div className="text-xl font-bold text-primary">{healthScore}%</div>
-                <div className="text-xs text-muted-foreground">Health</div>
+                <div className="text-xl font-bold text-status-green">{displayReport.bugs.resolved}</div>
+                <div className="text-xs text-muted-foreground">Bugs Resolvidos</div>
               </CardContent>
             </Card>
             <Card className="text-center">

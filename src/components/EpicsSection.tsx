@@ -115,9 +115,16 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                         </Badge>
                       </div>
 
-                      {/* Progresso % */}
-                      <div className="col-span-1 text-xs text-center font-medium">
-                        {epicProgress}%
+                      {/* Barra de Progresso */}
+                      <div className="col-span-1 flex items-center justify-center">
+                        <div className="w-8">
+                          <ProgressBar 
+                            value={epicProgress} 
+                            size="sm" 
+                            showValue={false}
+                            variant={epicProgress === 100 ? 'success' : epicProgress > 0 ? 'warning' : 'default'}
+                          />
+                        </div>
                         {epic.concerns && <AlertCircle className="h-3 w-3 text-status-yellow ml-1" />}
                       </div>
                     </div>

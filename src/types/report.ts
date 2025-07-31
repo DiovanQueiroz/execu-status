@@ -25,7 +25,7 @@ export interface Epic {
   status: Status; // status manual do épico
   owner: string;
   dueDate: string;
-  concerns: string;
+  concerns?: string;
   phase: 'requirements' | 'development' | 'qa'; // fase da timeline
   userStories: UserStory[];
 }
@@ -42,7 +42,7 @@ export interface Blocker {
   id: string;
   title: string;
   description: string;
-  severity: 'critical' | 'high' | 'medium';
+  severity: 'critical' | 'high' | 'medium' | 'low';
   owner: string;
   estimatedResolution: string;
 }
@@ -52,7 +52,7 @@ export interface HelpRequest {
   title: string;
   description: string;
   department: string;
-  urgency: 'urgent' | 'high' | 'normal';
+  urgency: 'urgent' | 'high' | 'normal' | 'medium' | 'low';
   requestedBy: string;
 }
 
@@ -62,7 +62,7 @@ export interface Action {
   description: string;
   owner: string;
   dueDate: string;
-  priority: 'high' | 'medium' | 'low';
+  priority: 'critical' | 'high' | 'medium' | 'low';
   status: 'pending' | 'in-progress' | 'completed';
 }
 
@@ -72,6 +72,11 @@ export interface ProjectReport {
   reportDate: string;
   productOwner: string;
   version: number;
+  bugs: {
+    open: number;
+    resolved: number;
+    total: number;
+  };
   timeline: {
     requirements: TimelinePhase;
     development: TimelinePhase;

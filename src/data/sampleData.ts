@@ -6,6 +6,11 @@ export const sampleReport: ProjectReport = {
   reportDate: '2024-01-28',
   productOwner: 'Maria Silva',
   version: 1,
+  bugs: {
+    open: 12,
+    resolved: 28,
+    total: 40
+  },
   timeline: {
     requirements: {
       name: 'Requirements & Discovery',
