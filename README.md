@@ -62,14 +62,25 @@ This project is built with:
 
 ## Backend Setup
 
-1. Create the MySQL database using `mysql-schema.sql`:
+1. Start a local MySQL instance using Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+This will create a MySQL server accessible on `localhost:3306` with the
+credentials defined in `.env.example`. The schema in `mysql-schema.sql` is
+loaded automatically.
+
+If you prefer to use an existing MySQL server, create the database manually:
 
 ```bash
 mysql -u <DB_USER> -p -h <DB_HOST> -e "CREATE DATABASE <DB_NAME>;"
 mysql -u <DB_USER> -p -h <DB_HOST> <DB_NAME> < mysql-schema.sql
 ```
 
-2. Copy `.env.example` to `.env` and set the following variables:
+2. Copy `.env.example` to `.env` and set the following variables (update them if
+you changed the database credentials):
 
    - `DB_HOST` – database host
    - `DB_USER` – MySQL user
