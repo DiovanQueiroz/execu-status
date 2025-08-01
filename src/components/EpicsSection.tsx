@@ -107,7 +107,7 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                       </div>
 
                       {/* Data */}
-                      <div className="col-span-3 text-xs">
+                      <div className="col-span-2 text-xs">
                         <span className={isOverdue(epic.dueDate) && epic.status !== 'green' ? 'text-status-red font-semibold' : ''}>
                           {formatDate(epic.dueDate)}
                         </span>

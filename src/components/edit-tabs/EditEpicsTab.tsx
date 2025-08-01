@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Epic, UserStory } from '@/types/report';
 import { Plus, Trash2, Edit3 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -17,6 +18,7 @@ interface EditEpicsTabProps {
 
 export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
   const [editingEpic, setEditingEpic] = useState<string | null>(null);
+  const [editingEpicName, setEditingEpicName] = useState('');
   const [expandedEpics, setExpandedEpics] = useState<Set<string>>(new Set());
 
   const addEpic = () => {
@@ -30,7 +32,6 @@ export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
       userStories: []
     };
     onUpdate([...epics, newEpic]);
-    setEditingEpic(newEpic.id);
   };
 
   const deleteEpic = (epicId: string) => {
@@ -99,18 +100,7 @@ export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
               <CollapsibleTrigger asChild>
                 <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                   <CardTitle className="text-base flex items-center justify-between">
-                    {editingEpic === epic.id ? (
-                      <Input
-                        value={epic.name}
-                        onChange={(e) => updateEpic(epic.id, { name: e.target.value })}
-                        onBlur={() => setEditingEpic(null)}
-                        onKeyDown={(e) => e.key === 'Enter' && setEditingEpic(null)}
-                        autoFocus
-                        className="text-base font-medium"
-                      />
-                    ) : (
-                      <span onClick={(e) => e.stopPropagation()}>{epic.name}</span>
-                    )}
+                    <span>{epic.name}</span>
                     <div className="flex items-center gap-2">
                       <Button
                         variant="ghost"
@@ -118,6 +108,7 @@ export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
                         onClick={(e) => {
                           e.stopPropagation();
                           setEditingEpic(epic.id);
+                          setEditingEpicName(epic.name);
                         }}
                       >
                         <Edit3 className="h-4 w-4" />
@@ -259,6 +250,39 @@ export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
           </Card>
         ))}
       </div>
+
+      {/* Modal para editar nome do épico */}
+      <Dialog open={editingEpic !== null} onOpenChange={() => setEditingEpic(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Nome do Épico</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="epic-name">Nome do Épico</Label>
+              <Input
+                id="epic-name"
+                value={editingEpicName}
+                onChange={(e) => setEditingEpicName(e.target.value)}
+                placeholder="Digite o nome do épico"
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setEditingEpic(null)}>
+                Cancelar
+              </Button>
+              <Button onClick={() => {
+                if (editingEpic) {
+                  updateEpic(editingEpic, { name: editingEpicName });
+                  setEditingEpic(null);
+                }
+              }}>
+                Salvar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
