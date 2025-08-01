@@ -92,7 +92,7 @@ you changed the database credentials):
 
 ```bash
 npm install
-node server/index.js
+npx ts-node server/app.ts
 ```
 
 ## How can I deploy this project?
