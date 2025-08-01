@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ReportService } from '@/services/reportService';
+import { reportService } from '@/services/reportService';
 import { ProjectReport, StoredReport, ReportVersion } from '@/types/report';
 import { toast } from 'sonner';
 
@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 export const useReports = () => {
   return useQuery({
     queryKey: ['reports'],
-    queryFn: ReportService.getAllReports,
+    queryFn: reportService.getAllReports,
     staleTime: 5 * 60 * 1000, // 5 minutos
   });
 };
@@ -16,7 +16,7 @@ export const useReports = () => {
 export const useReport = (id: string) => {
   return useQuery({
     queryKey: ['report', id],
-    queryFn: () => ReportService.getReport(id),
+    queryFn: () => reportService.getReport(id),
     enabled: !!id,
   });
 };
@@ -25,7 +25,7 @@ export const useReport = (id: string) => {
 export const useReportVersions = (reportId: string) => {
   return useQuery({
     queryKey: ['report-versions', reportId],
-    queryFn: () => ReportService.getReportVersions(reportId),
+    queryFn: () => reportService.getReportVersions(reportId),
     enabled: !!reportId,
   });
 };
@@ -34,7 +34,7 @@ export const useReportVersions = (reportId: string) => {
 export const useReportVersion = (reportId: string, version: number) => {
   return useQuery({
     queryKey: ['report-version', reportId, version],
-    queryFn: () => ReportService.getReportVersion(reportId, version),
+    queryFn: () => reportService.getReportVersion(reportId, version),
     enabled: !!reportId && !!version,
   });
 };
@@ -44,7 +44,7 @@ export const useCreateReport = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ReportService.createReport,
+    mutationFn: reportService.createReport,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
       toast.success('Relatório criado com sucesso!');
@@ -71,7 +71,7 @@ export const useCreateReportVersion = () => {
       report: ProjectReport; 
       description: string;
       author: string;
-    }) => ReportService.createReportVersion(reportId, report, description, author),
+    }) => reportService.createReportVersion(reportId, report, description, author),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
       queryClient.invalidateQueries({ queryKey: ['report', variables.reportId] });
@@ -90,7 +90,7 @@ export const useDeleteReport = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ReportService.deleteReport,
+    mutationFn: reportService.deleteReport,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
       toast.success('Relatório excluído com sucesso!');

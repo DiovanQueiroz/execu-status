@@ -84,7 +84,7 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                   <CollapsibleTrigger className="w-full">
                     <div className="grid grid-cols-14 gap-2 items-center py-2 px-3 text-sm">
                       {/* Chevron + Nome */}
-                      <div className="col-span-4 flex items-center gap-2 text-left">
+                      <div className="col-span-3 flex items-center gap-2 text-left">
                         {isOpen ? (
                           <ChevronDown className="h-3 w-3 text-muted-foreground flex-shrink-0" />
                         ) : (
@@ -118,11 +118,15 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                         <StatusBadge status={epic.status} size="sm" />
                       </div>
 
-                      {/* Status de Progresso + Concerns */}
+                      {/* Status de Progresso */}
                       <div className="col-span-2 flex items-center gap-1">
                         <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">
                           {getProgressBadge(epic.phase).label}
                         </Badge>
+                      </div>
+
+                      {/* Concerns Tooltip */}
+                      <div className="col-span-1 flex items-center">
                         {epic.concerns && <AlertCircle className="h-3 w-3 text-status-yellow" />}
                       </div>
                     </div>
