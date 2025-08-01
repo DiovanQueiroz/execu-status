@@ -118,15 +118,11 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                         <StatusBadge status={epic.status} size="sm" />
                       </div>
 
-                      {/* Status de Progresso */}
-                      <div className="col-span-2">
+                      {/* Status de Progresso + Concerns */}
+                      <div className="col-span-2 flex items-center gap-1">
                         <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">
                           {getProgressBadge(epic.phase).label}
                         </Badge>
-                      </div>
-
-                      {/* Concerns Alert */}
-                      <div className="col-span-1 flex items-center justify-center">
                         {epic.concerns && <AlertCircle className="h-3 w-3 text-status-yellow" />}
                       </div>
                     </div>
