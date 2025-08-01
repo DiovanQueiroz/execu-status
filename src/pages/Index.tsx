@@ -86,8 +86,8 @@ const Index = () => {
           <div className="col-span-6 grid grid-cols-5 gap-3">
             <Card className="text-center">
               <CardContent className="p-3">
-                <div className="text-xl font-bold text-status-green">{displayReport.bugs.resolved}</div>
-                <div className="text-xs text-muted-foreground">Bugs Resolvidos</div>
+                <div className="text-xl font-bold text-status-yellow">{displayReport.bugs.total - displayReport.bugs.resolved}</div>
+                <div className="text-xs text-muted-foreground">Bugs em Aberto</div>
               </CardContent>
             </Card>
             <Card className="text-center">
@@ -165,22 +165,6 @@ const Index = () => {
             </CardContent>
           </Card>
 
-          {/* Help Requests */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="font-semibold text-sm mb-3 text-primary">❓ Ajuda</div>
-              <div className="space-y-2">
-                {displayReport.helpRequests.map((help) => (
-                  <div key={help.id} className="text-xs p-2 bg-primary/10 rounded">
-                    <div className="font-medium">{help.title}</div>
-                    <div className="text-muted-foreground">{help.department} - {help.urgency}</div>
-                    <div className="text-muted-foreground">{help.requestedBy}</div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
           {/* Actions */}
           <Card>
             <CardContent className="p-4">
@@ -191,6 +175,22 @@ const Index = () => {
                     <div className="font-medium">{action.title}</div>
                     <div className="text-muted-foreground">{action.owner} - {action.priority}</div>
                     <div className="text-muted-foreground">{formatDate(action.dueDate)}</div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Help Requests */}
+          <Card>
+            <CardContent className="p-4">
+              <div className="font-semibold text-sm mb-3 text-primary">❓ Preciso de Ajuda!</div>
+              <div className="space-y-2">
+                {displayReport.helpRequests.map((help) => (
+                  <div key={help.id} className="text-xs p-2 bg-primary/10 rounded">
+                    <div className="font-medium">{help.title}</div>
+                    <div className="text-muted-foreground">{help.department} - {help.urgency}</div>
+                    <div className="text-muted-foreground">{help.requestedBy}</div>
                   </div>
                 ))}
               </div>

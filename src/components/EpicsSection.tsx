@@ -96,6 +96,16 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                       {/* Owner */}
                       <div className="col-span-2 truncate">{epic.owner}</div>
 
+                      {/* Progresso Visual */}
+                      <div className="col-span-2">
+                        <ProgressBar 
+                          value={epicProgress} 
+                          variant={epic.status === 'green' ? 'success' : epic.status === 'yellow' ? 'warning' : 'danger'}
+                          size="sm" 
+                          showValue={false}
+                        />
+                      </div>
+
                       {/* Data */}
                       <div className="col-span-3 text-xs">
                         <span className={isOverdue(epic.dueDate) && epic.status !== 'green' ? 'text-status-red font-semibold' : ''}>
@@ -115,17 +125,9 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                         </Badge>
                       </div>
 
-                      {/* Barra de Progresso */}
+                      {/* Concerns Alert */}
                       <div className="col-span-1 flex items-center justify-center">
-                        <div className="w-8">
-                          <ProgressBar 
-                            value={epicProgress} 
-                            size="sm" 
-                            showValue={false}
-                            variant={epicProgress === 100 ? 'success' : epicProgress > 0 ? 'warning' : 'default'}
-                          />
-                        </div>
-                        {epic.concerns && <AlertCircle className="h-3 w-3 text-status-yellow ml-1" />}
+                        {epic.concerns && <AlertCircle className="h-3 w-3 text-status-yellow" />}
                       </div>
                     </div>
                   </CollapsibleTrigger>
