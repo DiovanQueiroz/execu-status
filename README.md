@@ -60,6 +60,30 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Backend Setup
+
+1. Create the MySQL database using `mysql-schema.sql`:
+
+```bash
+mysql -u <DB_USER> -p -h <DB_HOST> -e "CREATE DATABASE <DB_NAME>;"
+mysql -u <DB_USER> -p -h <DB_HOST> <DB_NAME> < mysql-schema.sql
+```
+
+2. Copy `.env.example` to `.env` and set the following variables:
+
+   - `DB_HOST` – database host
+   - `DB_USER` – MySQL user
+   - `DB_PASSWORD` – MySQL password
+   - `DB_NAME` – database name
+   - `PORT` – Express server port
+
+3. Install dependencies and start the Express server:
+
+```bash
+npm install
+node server/index.js
+```
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/cb667c62-c93c-44c9-93b8-8dea5cab5bed) and click on Share -> Publish.
