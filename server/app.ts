@@ -16,6 +16,26 @@ app.use(cors({
 
 app.use(express.json());
 
+// Health check endpoint for Docker
+app.get('/health', async (_req, res) => {
+  try {
+    // Test database connection
+    await pool.query('SELECT 1');
+    res.status(200).json({ 
+      status: 'healthy', 
+      timestamp: new Date().toISOString(),
+      database: 'connected'
+    });
+  } catch (err) {
+    res.status(503).json({ 
+      status: 'unhealthy', 
+      timestamp: new Date().toISOString(),
+      database: 'disconnected',
+      error: err instanceof Error ? err.message : 'Unknown error'
+    });
+  }
+});
+
 // GET /reports - list all reports with their versions
 app.get('/reports', async (_req, res) => {
   try {

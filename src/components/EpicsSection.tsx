@@ -6,6 +6,7 @@ import { Epic } from '@/types/report';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface EpicsSectionProps {
   epics: Epic[];
@@ -127,7 +128,16 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
 
                       {/* Concerns Tooltip */}
                       <div className="col-span-1 flex items-center">
-                        {epic.concerns && <AlertCircle className="h-3 w-3 text-status-yellow" />}
+                        {epic.concerns && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <AlertCircle className="h-3 w-3 text-status-yellow cursor-help" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="max-w-xs text-sm">{epic.concerns}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
                       </div>
                     </div>
                   </CollapsibleTrigger>
