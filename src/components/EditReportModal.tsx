@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EditEpicsTab } from './edit-tabs/EditEpicsTab';
 import { EditHighlightsTab } from './edit-tabs/EditHighlightsTab';
 import { EditBlockersTab } from './edit-tabs/EditBlockersTab';
 import { EditHelpRequestsTab } from './edit-tabs/EditHelpRequestsTab';
 import { EditActionsTab } from './edit-tabs/EditActionsTab';
-import { ProjectReport } from '@/types/report';
+import { ProjectReport, ReportVersion } from '@/types/report';
 import { useCreateReportVersion } from '@/hooks/useReports';
 import { Save } from 'lucide-react';
 
@@ -17,26 +17,50 @@ interface EditReportModalProps {
   report: ProjectReport;
   reportId: string;
   onSuccess?: () => void;
+  onVersionCreated?: (version: ReportVersion) => void;
 }
 
-export const EditReportModal = ({ isOpen, onClose, report, reportId, onSuccess }: EditReportModalProps) => {
+export const EditReportModal = ({ isOpen, onClose, report, reportId, onSuccess, onVersionCreated }: EditReportModalProps) => {
   const [editedReport, setEditedReport] = useState<ProjectReport>(report);
   const [activeTab, setActiveTab] = useState('epics');
   const createVersionMutation = useCreateReportVersion();
 
+  // Recarrega o editedReport sempre que o modal abrir ou o report mudar
+  React.useEffect(() => {
+    if (isOpen) {
+      setEditedReport({ ...report });
+    }
+  }, [isOpen, report]);
+
   const handleSave = async () => {
     try {
-      await createVersionMutation.mutateAsync({
+      const now = new Date();
+      const dateVersion = now.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).replace(/[/:]/g, '-');
+      
+      console.log('Salvando relatório editado:', editedReport);
+      
+      const newVersion = await createVersionMutation.mutateAsync({
         reportId,
         report: {
           ...editedReport,
           version: report.version + 1,
-          reportDate: new Date().toISOString()
+          // Mantém a data original do relatório, não sobrescreve com a data atual
+          reportDate: editedReport.reportDate
         },
-        description: `Versão ${report.version + 1} - Edição via modal`,
+        description: `Versão ${dateVersion}`,
         author: 'Sistema'
       });
       
+      console.log('Nova versão criada:', newVersion);
+      
+      // Chama a função que atualiza o relatório atual
+      onVersionCreated?.(newVersion);
       onSuccess?.();
       onClose();
     } catch (error) {
@@ -63,6 +87,9 @@ export const EditReportModal = ({ isOpen, onClose, report, reportId, onSuccess }
               {createVersionMutation.isPending ? 'Salvando...' : 'Salvar Nova Versão'}
             </Button>
           </DialogTitle>
+          <DialogDescription>
+            Edite os dados do relatório e salve uma nova versão quando estiver pronto.
+          </DialogDescription>
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

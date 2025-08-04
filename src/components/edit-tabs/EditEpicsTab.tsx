@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Epic, UserStory } from '@/types/report';
 import { Plus, Trash2, Edit3 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -256,6 +256,9 @@ export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Editar Nome do Épico</DialogTitle>
+            <DialogDescription>
+              Altere o nome do épico conforme necessário.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>

@@ -9,7 +9,14 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "db:start": "docker-compose up -d"
+    "db:start": "docker-compose up -d",
+    "server": "node dist/app.js",
+    "build:server": "tsc -p tsconfig.server.json",
+    "dev:all": "npm run build:server && concurrently \"npm run db:start\" \"npm run server\" \"npm run dev\"",
+    "dev:frontend": "concurrently \"npm run server\" \"npm run dev\"",
+    "dev:backend": "concurrently \"npm run db:start\" \"npm run server\"",
+    "dev:stop": "docker-compose down && pkill -f 'node dist/app.js' && pkill -f 'vite'",
+    "dev:restart": "npm run dev:stop && npm run dev:all"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -44,10 +51,14 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
+    "cors": "^2.8.5",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.6.1",
     "embla-carousel-react": "^8.3.0",
+    "express": "^4.19.2",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.462.0",
+    "mysql2": "^3.9.5",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
@@ -60,11 +71,7 @@
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.3",
-    "zod": "^3.23.8",
-    "express": "^4.19.2",
-    "mysql2": "^3.9.5",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
@@ -74,6 +81,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^9.2.0",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
@@ -81,6 +89,7 @@
     "lovable-tagger": "^1.1.7",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.11",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1"

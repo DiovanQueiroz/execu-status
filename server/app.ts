@@ -1,8 +1,19 @@
+import 'dotenv/config';
 import express from 'express';
-import pool from './db';
+import cors from 'cors';
+import pool from './db.js';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2/promise';
 
 const app = express();
+
+// Configurar CORS
+app.use(cors({
+  origin: ['http://localhost:8080', 'http://localhost:8081', 'http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 // GET /reports - list all reports with their versions
@@ -69,6 +80,21 @@ app.post('/reports', async (req, res) => {
   }
 });
 
+// GET /reports/:id/versions - get all versions of a report
+app.get('/reports/:id/versions', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [versionRows] = await pool.query<RowDataPacket[]>(
+      'SELECT * FROM report_versions WHERE report_id = ? ORDER BY version DESC',
+      [id]
+    );
+    res.json(versionRows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch versions' });
+  }
+});
+
 // POST /reports/:id/versions - add a new version to a report
 app.post('/reports/:id/versions', async (req, res) => {
   const { id } = req.params;
@@ -89,7 +115,19 @@ app.post('/reports/:id/versions', async (req, res) => {
       'UPDATE project_reports SET current_version = ?, report_data = ?, updated_at = ? WHERE id = ?',
       [newVersion, JSON.stringify(report), now, id]
     );
-    res.status(201).json({ version: newVersion });
+    
+    // Retorna o objeto completo da versão criada
+    const createdVersion = {
+      id: `${id}-v${newVersion}`,
+      version: newVersion,
+      report_data: report,
+      created_at: now,
+      updated_at: now,
+      description,
+      author
+    };
+    
+    res.status(201).json(createdVersion);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to create version' });
@@ -111,10 +149,16 @@ app.delete('/reports/:id', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-if (require.main === module) {
+// Start server if this file is run directly
+const startServer = () => {
   app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
   });
+};
+
+// Check if this file is being run directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  startServer();
 }
 
 export default app;

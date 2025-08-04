@@ -11,6 +11,7 @@ export const reportService = {
   },
 
   async getReportVersions(reportId: string): Promise<ReportVersion[]> {
+    console.log('getReportVersions called with reportId:', reportId);
     return api.get<ReportVersion[]>(`/reports/${reportId}/versions`);
   },
 
@@ -24,6 +25,7 @@ export const reportService = {
     description: string,
     author: string
   ): Promise<ReportVersion> {
+    console.log('createReportVersion called with reportId:', reportId);
     return api.post<ReportVersion>(`/reports/${reportId}/versions`, {
       report,
       description,
