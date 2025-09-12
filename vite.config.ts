@@ -20,14 +20,15 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
+    target: 'esnext',
+    minify: false,
     rollupOptions: {
-      external: [],
       output: {
-        manualChunks: undefined,
+        format: 'es',
       },
     },
   },
-  optimizeDeps: {
-    include: ["react", "react-dom"],
+  esbuild: {
+    target: 'esnext',
   },
 }));
