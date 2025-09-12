@@ -19,16 +19,4 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  build: {
-    target: 'esnext',
-    minify: false,
-    rollupOptions: {
-      output: {
-        format: 'es',
-      },
-    },
-  },
-  esbuild: {
-    target: 'esnext',
-  },
 }));

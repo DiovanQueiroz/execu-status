@@ -7,23 +7,20 @@ import { VersionHistory } from '@/components/VersionHistory';
 import { sampleReport } from '@/data/sampleData';
 import { ProjectReport, ReportVersion } from '@/types/report';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useCreateReport, useCurrentReport } from '@/hooks/useReports';
+import { useCreateReport } from '@/hooks/useReports';
 import { 
   TrendingUp, TrendingDown, CheckCircle, AlertTriangle, 
   Package, Clock, User, Calendar, Shield, HelpCircle 
 } from 'lucide-react';
 
 const Index = () => {
-  const [reportId] = useState<string>('718e2e6c-6f25-11f0-9416-b66dd01f1da5');
+  const [currentReport, setCurrentReport] = useState<ProjectReport>(sampleReport);
+  const [reportId, setReportId] = useState<string>('sample-report-id');
   const [viewingVersion, setViewingVersion] = useState<ReportVersion | null>(null);
   const createReportMutation = useCreateReport();
-  
-  // Busca o relatório atual do banco de dados
-  const { data: currentReport, isLoading, refetch } = useCurrentReport(reportId);
 
   // Determina qual relatório está sendo visualizado
-  const displayReport = viewingVersion?.report_data || currentReport;
+  const displayReport = viewingVersion?.report || currentReport;
 
   // Função para alternar entre versões
   const handleSelectVersion = (version: ReportVersion) => {
@@ -35,38 +32,6 @@ const Index = () => {
     setViewingVersion(null);
   };
 
-  // Função para quando uma nova versão for criada
-  const handleVersionCreated = (newVersion: ReportVersion) => {
-    // Verifica se os dados da versão estão completos
-    if (newVersion?.report_data) {
-      // Recarrega os dados do banco para garantir que está com a versão mais recente
-      refetch();
-      setViewingVersion(null); // Garante que está vendo a versão atual
-    } else {
-      console.error('Dados da nova versão estão incompletos:', newVersion);
-    }
-  };
-
-  // Proteção para evitar crash se displayReport for undefined ou ainda carregando
-  if (isLoading || !displayReport || !displayReport.epics) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-center">
-              <h2 className="text-xl font-semibold text-gray-600 mb-2">
-                Carregando relatório...
-              </h2>
-              <p className="text-gray-500">
-                Aguarde enquanto os dados são carregados.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   // Calcular métricas baseadas no relatório sendo visualizado
   const totalEpics = displayReport.epics.length;
   const epicsOnTrack = displayReport.epics.filter(f => f.status === 'green').length;
@@ -76,11 +41,7 @@ const Index = () => {
   const overallProgress = Math.round(phases.reduce((sum, phase) => sum + phase.progress, 0) / phases.length);
   const bugResolutionRate = Math.round((displayReport.bugs.resolved / displayReport.bugs.total) * 100);
 
-  const formatDate = (dateString: string) => {
-    // Adiciona 'T00:00:00' para forçar timezone local em vez de UTC
-    const date = new Date(dateString + 'T00:00:00');
-    return date.toLocaleDateString('pt-BR');
-  };
+  const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('pt-BR');
 
   return (
     <div className="min-h-screen bg-background p-4">
@@ -113,14 +74,12 @@ const Index = () => {
                   report={currentReport} 
                   reportId={reportId}
                   onSuccess={handleBackToCurrent}
-                  onVersionCreated={handleVersionCreated}
                 />
                 <VersionHistory 
                   reportId={reportId}
                   currentVersion={currentReport.version}
                   onSelectVersion={handleSelectVersion}
                 />
-
               </>
             )}
           </div>

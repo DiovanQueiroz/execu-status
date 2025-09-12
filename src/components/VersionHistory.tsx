@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { History, Eye, Calendar, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,11 +19,7 @@ export const VersionHistory = ({ reportId, currentVersion, onSelectVersion }: Ve
   const { data: versions = [], isLoading } = useReportVersions(reportId);
 
   const formatDate = (dateString: string) => {
-    if (!dateString) return 'Data inválida';
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) return 'Data inválida';
-    
-    return date.toLocaleDateString('pt-BR', {
+    return new Date(dateString).toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -48,9 +44,6 @@ export const VersionHistory = ({ reportId, currentVersion, onSelectVersion }: Ve
       <DialogContent className="max-w-2xl max-h-[80vh]">
         <DialogHeader>
           <DialogTitle>Histórico de Versões do Relatório</DialogTitle>
-          <DialogDescription>
-            Visualize e selecione versões anteriores do relatório.
-          </DialogDescription>
         </DialogHeader>
         
         <ScrollArea className="h-[60vh] pr-4">
@@ -66,9 +59,9 @@ export const VersionHistory = ({ reportId, currentVersion, onSelectVersion }: Ve
                         <div className="flex items-center gap-2 mb-2">
                           <Badge 
                             variant={version.version === currentVersion ? "default" : "secondary"}
-                            className="font-mono text-xs"
+                            className="font-mono"
                           >
-                            {formatDate(version.created_at)}
+                            v{version.version}
                           </Badge>
                           {version.version === currentVersion && (
                             <Badge variant="outline" className="text-xs">
@@ -88,17 +81,17 @@ export const VersionHistory = ({ reportId, currentVersion, onSelectVersion }: Ve
                           </div>
                           <div className="flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
-                            {formatDate(version.created_at)}
+                            {formatDate(version.createdAt)}
                           </div>
                         </div>
                         
                         {/* Prévia das principais métricas desta versão */}
                         <div className="mt-3 p-2 bg-muted/50 rounded text-xs">
                           <div className="grid grid-cols-2 gap-2">
-                            <span>Épicos: {version.report_data?.epics?.length || 0}</span>
-                            <span>Highlights: {version.report_data?.highlights?.length || 0}</span>
-                            <span>Bloqueios: {version.report_data?.blockers?.length || 0}</span>
-                            <span>Ações: {version.report_data?.actions?.length || 0}</span>
+                            <span>Épicos: {version.report.epics?.length || 0}</span>
+                            <span>Highlights: {version.report.highlights?.length || 0}</span>
+                            <span>Bloqueios: {version.report.blockers?.length || 0}</span>
+                            <span>Ações: {version.report.actions?.length || 0}</span>
                           </div>
                         </div>
                       </div>

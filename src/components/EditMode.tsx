@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { EditIcon } from 'lucide-react';
-import { ProjectReport, ReportVersion } from '@/types/report';
+import { ProjectReport } from '@/types/report';
 import { EditReportModal } from './EditReportModal';
 
 interface EditModeProps {
   report: ProjectReport;
   reportId: string;
   onSuccess?: () => void;
-  onVersionCreated?: (version: ReportVersion) => void;
 }
 
-export const EditMode = ({ report, reportId, onSuccess, onVersionCreated }: EditModeProps) => {
+export const EditMode = ({ report, reportId, onSuccess }: EditModeProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleEdit = () => {
@@ -36,7 +35,7 @@ export const EditMode = ({ report, reportId, onSuccess, onVersionCreated }: Edit
         className="flex items-center gap-2"
       >
         <EditIcon className="h-4 w-4" />
-        Criar Versão
+        Editar
       </Button>
 
       <EditReportModal
@@ -45,7 +44,6 @@ export const EditMode = ({ report, reportId, onSuccess, onVersionCreated }: Edit
         report={report}
         reportId={reportId}
         onSuccess={handleSuccess}
-        onVersionCreated={onVersionCreated}
       />
     </>
   );

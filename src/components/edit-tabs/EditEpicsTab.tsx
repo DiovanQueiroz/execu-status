@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Epic, UserStory } from '@/types/report';
 import { Plus, Trash2, Edit3 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -19,43 +20,18 @@ export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
   const [editingEpic, setEditingEpic] = useState<string | null>(null);
   const [editingEpicName, setEditingEpicName] = useState('');
   const [expandedEpics, setExpandedEpics] = useState<Set<string>>(new Set());
-  const [newlyCreated, setNewlyCreated] = useState<Set<string>>(new Set());
-
-  // Remove destaque de itens recém-criados após 3 segundos
-  useEffect(() => {
-    if (newlyCreated.size > 0) {
-      const timer = setTimeout(() => {
-        setNewlyCreated(new Set());
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [newlyCreated]);
 
   const addEpic = () => {
-    const newEpicId = `epic-${Date.now()}`;
     const newEpic: Epic = {
-      id: newEpicId,
+      id: `epic-${Date.now()}`,
       name: 'Novo Épico',
       status: 'green',
       owner: '',
       dueDate: new Date().toISOString().split('T')[0],
       phase: 'requirements',
-      userStories: [],
-      concerns: '' // Sempre incluir campo de preocupações
+      userStories: []
     };
-    
-    // Adiciona o épico e automaticamente o expande
     onUpdate([...epics, newEpic]);
-    
-    // Expande automaticamente o novo épico
-    setExpandedEpics(prev => new Set(prev).add(newEpicId));
-    
-    // Marca como recém-criado para animação
-    setNewlyCreated(prev => new Set(prev).add(newEpicId));
-    
-    // Coloca o novo épico em modo de edição de nome
-    setEditingEpic(newEpicId);
-    setEditingEpicName('');
   };
 
   const deleteEpic = (epicId: string) => {
@@ -69,9 +45,9 @@ export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
   const addUserStory = (epicId: string) => {
     const newStory: UserStory = {
       id: `story-${Date.now()}`,
-      ticketNumber: '',
-      name: '',
-      boardStatus: '',
+      ticketNumber: `TICKET-${Math.floor(Math.random() * 1000)}`,
+      name: 'Nova User Story',
+      boardStatus: 'To Do',
       progress: 0
     };
     
@@ -116,14 +92,7 @@ export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
 
       <div className="space-y-3">
         {epics.map((epic) => (
-          <Card 
-            key={epic.id} 
-            className={`transition-all duration-300 ${
-              newlyCreated.has(epic.id) 
-                ? 'ring-2 ring-blue-500 shadow-lg scale-[1.02]' 
-                : ''
-            }`}
-          >
+          <Card key={epic.id}>
             <Collapsible 
               open={expandedEpics.has(epic.id)} 
               onOpenChange={() => toggleEpicExpansion(epic.id)}
@@ -131,31 +100,7 @@ export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
               <CollapsibleTrigger asChild>
                 <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                   <CardTitle className="text-base flex items-center justify-between">
-                    {editingEpic === epic.id ? (
-                      <Input
-                        value={editingEpicName}
-                        onChange={(e) => setEditingEpicName(e.target.value)}
-                        onBlur={() => {
-                          updateEpic(epic.id, { name: editingEpicName });
-                          setEditingEpic(null);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            updateEpic(epic.id, { name: editingEpicName });
-                            setEditingEpic(null);
-                          }
-                          if (e.key === 'Escape') {
-                            setEditingEpic(null);
-                            setEditingEpicName(epic.name);
-                          }
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                        className="mr-2"
-                        autoFocus
-                      />
-                    ) : (
-                      <span>{epic.name}</span>
-                    )}
+                    <span>{epic.name}</span>
                     <div className="flex items-center gap-2">
                       <Button
                         variant="ghost"
@@ -231,16 +176,17 @@ export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
                     </div>
                   </div>
 
-                  <div className="mb-4">
-                    <Label htmlFor={`concerns-${epic.id}`}>Preocupações</Label>
-                    <Textarea
-                      id={`concerns-${epic.id}`}
-                      value={epic.concerns || ''}
-                      onChange={(e) => updateEpic(epic.id, { concerns: e.target.value })}
-                      placeholder="Descreva as preocupações sobre este épico..."
-                      rows={2}
-                    />
-                  </div>
+                  {epic.concerns !== undefined && (
+                    <div className="mb-4">
+                      <Label htmlFor={`concerns-${epic.id}`}>Preocupações</Label>
+                      <Textarea
+                        id={`concerns-${epic.id}`}
+                        value={epic.concerns || ''}
+                        onChange={(e) => updateEpic(epic.id, { concerns: e.target.value || undefined })}
+                        placeholder="Descreva as preocupações sobre este épico..."
+                      />
+                    </div>
+                  )}
 
                   <Separator className="my-4" />
 
@@ -305,7 +251,38 @@ export const EditEpicsTab = ({ epics, onUpdate }: EditEpicsTabProps) => {
         ))}
       </div>
 
-
+      {/* Modal para editar nome do épico */}
+      <Dialog open={editingEpic !== null} onOpenChange={() => setEditingEpic(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Nome do Épico</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="epic-name">Nome do Épico</Label>
+              <Input
+                id="epic-name"
+                value={editingEpicName}
+                onChange={(e) => setEditingEpicName(e.target.value)}
+                placeholder="Digite o nome do épico"
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setEditingEpic(null)}>
+                Cancelar
+              </Button>
+              <Button onClick={() => {
+                if (editingEpic) {
+                  updateEpic(editingEpic, { name: editingEpicName });
+                  setEditingEpic(null);
+                }
+              }}>
+                Salvar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

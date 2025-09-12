@@ -92,9 +92,9 @@ export interface ProjectReport {
 export interface ReportVersion {
   id: string;
   version: number;
-  report_data: ProjectReport;
-  created_at: string;
-  updated_at: string;
+  report: ProjectReport;
+  createdAt: string;
+  updatedAt: string;
   description: string;
   author: string;
 }

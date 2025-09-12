@@ -6,7 +6,6 @@ import { Epic } from '@/types/report';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface EpicsSectionProps {
   epics: Epic[];
@@ -83,9 +82,9 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
               <Collapsible key={epic.id} open={isOpen} onOpenChange={() => toggleEpic(epic.id)}>
                 <div className="border rounded hover:bg-muted/30 transition-colors">
                   <CollapsibleTrigger className="w-full">
-                    <div className="grid grid-cols-12 gap-2 items-center py-2 px-3 text-sm">
+                    <div className="grid grid-cols-14 gap-2 items-center py-2 px-3 text-sm">
                       {/* Chevron + Nome */}
-                      <div className="col-span-3 flex items-center gap-2 text-left">
+                      <div className="col-span-4 flex items-center gap-2 text-left">
                         {isOpen ? (
                           <ChevronDown className="h-3 w-3 text-muted-foreground flex-shrink-0" />
                         ) : (
@@ -115,25 +114,20 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                       </div>
 
                       {/* Status de Saúde */}
-                      <div className="col-span-1">
+                      <div className="col-span-2">
                         <StatusBadge status={epic.status} size="sm" />
                       </div>
 
-                      {/* Status de Progresso + Concerns */}
-                      <div className="col-span-2 flex items-center justify-between">
+                      {/* Status de Progresso */}
+                      <div className="col-span-2">
                         <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">
                           {getProgressBadge(epic.phase).label}
                         </Badge>
-                        {epic.concerns && (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <AlertCircle className="h-3 w-3 text-status-yellow cursor-help" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p className="max-w-xs text-sm">{epic.concerns}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        )}
+                      </div>
+
+                      {/* Concerns Alert */}
+                      <div className="col-span-1 flex items-center justify-center">
+                        {epic.concerns && <AlertCircle className="h-3 w-3 text-status-yellow" />}
                       </div>
                     </div>
                   </CollapsibleTrigger>
@@ -149,14 +143,14 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                       
                       <div className="space-y-1 mt-2">
                         {epic.userStories.map((story) => (
-                          <div key={story.id} className="grid grid-cols-12 gap-2 items-center py-1 px-2 bg-background rounded text-xs">
+                          <div key={story.id} className="grid grid-cols-14 gap-2 items-center py-1 px-2 bg-background rounded text-xs">
                             <div className="col-span-1"></div>
                             <div className="col-span-2 font-mono text-muted-foreground">{story.ticketNumber}</div>
-                            <div className="col-span-4 truncate">{story.name}</div>
+                            <div className="col-span-5 truncate">{story.name}</div>
                             <div className="col-span-2 text-center">
                               <span className="px-2 py-1 bg-muted rounded text-xs">{story.boardStatus}</span>
                             </div>
-                            <div className="col-span-3">
+                            <div className="col-span-2">
                               <ProgressBar 
                                 value={story.progress} 
                                 size="sm" 
@@ -164,6 +158,7 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                                 variant={story.progress === 100 ? 'success' : story.progress > 0 ? 'warning' : 'default'}
                               />
                             </div>
+                            <div className="col-span-2"></div>
                           </div>
                         ))}
                       </div>

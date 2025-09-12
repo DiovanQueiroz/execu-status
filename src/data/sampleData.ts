@@ -2,9 +2,9 @@ import { ProjectReport } from '../types/report';
 
 export const sampleReport: ProjectReport = {
   id: 'report-001',
-  projectName: 'Margem Bruta',
-  reportDate: '2025-08-04',
-  productOwner: 'Diovan Queiroz',
+  projectName: 'Sistema de E-commerce Mobile',
+  reportDate: '2024-01-28',
+  productOwner: 'Maria Silva',
   version: 1,
   bugs: {
     open: 12,
