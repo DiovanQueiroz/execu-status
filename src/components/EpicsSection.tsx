@@ -83,7 +83,7 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
               <Collapsible key={epic.id} open={isOpen} onOpenChange={() => toggleEpic(epic.id)}>
                 <div className="border rounded hover:bg-muted/30 transition-colors">
                   <CollapsibleTrigger className="w-full">
-                    <div className="grid grid-cols-14 gap-2 items-center py-2 px-3 text-sm">
+                    <div className="grid grid-cols-12 gap-2 items-center py-2 px-3 text-sm">
                       {/* Chevron + Nome */}
                       <div className="col-span-3 flex items-center gap-2 text-left">
                         {isOpen ? (
@@ -115,19 +115,15 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                       </div>
 
                       {/* Status de Saúde */}
-                      <div className="col-span-2">
+                      <div className="col-span-1">
                         <StatusBadge status={epic.status} size="sm" />
                       </div>
 
-                      {/* Status de Progresso */}
-                      <div className="col-span-2 flex items-center gap-1">
+                      {/* Status de Progresso + Concerns */}
+                      <div className="col-span-2 flex items-center justify-between">
                         <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">
                           {getProgressBadge(epic.phase).label}
                         </Badge>
-                      </div>
-
-                      {/* Concerns Tooltip */}
-                      <div className="col-span-1 flex items-center">
                         {epic.concerns && (
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -153,14 +149,14 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                       
                       <div className="space-y-1 mt-2">
                         {epic.userStories.map((story) => (
-                          <div key={story.id} className="grid grid-cols-14 gap-2 items-center py-1 px-2 bg-background rounded text-xs">
+                          <div key={story.id} className="grid grid-cols-12 gap-2 items-center py-1 px-2 bg-background rounded text-xs">
                             <div className="col-span-1"></div>
                             <div className="col-span-2 font-mono text-muted-foreground">{story.ticketNumber}</div>
-                            <div className="col-span-5 truncate">{story.name}</div>
+                            <div className="col-span-4 truncate">{story.name}</div>
                             <div className="col-span-2 text-center">
                               <span className="px-2 py-1 bg-muted rounded text-xs">{story.boardStatus}</span>
                             </div>
-                            <div className="col-span-2">
+                            <div className="col-span-3">
                               <ProgressBar 
                                 value={story.progress} 
                                 size="sm" 
@@ -168,7 +164,6 @@ export const EpicsSection = ({ epics }: EpicsSectionProps) => {
                                 variant={story.progress === 100 ? 'success' : story.progress > 0 ? 'warning' : 'default'}
                               />
                             </div>
-                            <div className="col-span-2"></div>
                           </div>
                         ))}
                       </div>
